@@ -69,35 +69,42 @@ function doLottery(sheet, numLucky) {
   
   // 対象列の情報を取得
   var numList = getColumnList(sheet, sheet.getActiveCell().getColumn());
+  Logger.log('numList : ' + numList);
   
   for(var i = 0; i < numList.length; i++){
-    if(numList[i] !== ''){
+    if(numList[i] != ''){
       
       // 絶対に選ばれないように最大数 + 1
       numLucky[i] = maxNum + 1;
     }
   }
   
+  Logger.log('numLucky : ' + numLucky);
+  
   //ラッキーの最小数を取得
-  var minNum = Math.min.apply(null, numList);
+  var minNum = Math.min.apply(null, numLucky);
   
   for(var i = 0; i < numLucky.length; i++){
     
-    if(numList[i] > minNum){
-      numList[i] = maxNum;
+    if(numLucky[i] === maxNum + 1){
+      numLucky[i] = maxNum + 1;
+    }else if(numLucky[i] > minNum){
+      numLucky[i] = maxNum;
     }else{
-      numList[i] = getRandom(1, 100);
+      numLucky[i] = getRandom(1, 100);
     }
   }
   
   // 最小数を取得
-  minNum = Math.min.apply(null, numList);
+  minNum = Math.min.apply(null, numLucky);
   
-  Logger.log(numList);
   
-  for(var i = 0; i < numList.length; i++){
+  
+  Logger.log('numLucky : ' + numLucky);
+  
+  for(var i = 0; i < numLucky.length; i++){
     
-    if(numList[i] === minNum){
+    if(numLucky[i] === minNum){
       sheet.getActiveCell().offset(i, 0).setValue("ラ");  
       break;
     }
